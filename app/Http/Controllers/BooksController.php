@@ -15,7 +15,7 @@ class BooksController extends Controller
     public function index()
     {
         // FETCH ALL DATA
-        $books = Book::all();
+        $books = Book::with('author')->latest()->paginate(10);
         return view('Books.index', compact('books'));
         // return Book::all();
     }
