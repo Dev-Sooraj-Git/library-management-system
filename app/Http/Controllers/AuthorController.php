@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAuthorRequest;
 use App\Models\Author;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class AuthorController extends Controller
     public function index()
     {
         // FETCH ALL DATA
-        $authors = Author::query()->latest()->paginate(10);
+        $authors = Author::query()->latest()->paginate(5);
         return view('authors.index', compact('authors'));
         // return Author::all();
     }
@@ -29,17 +30,19 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAuthorRequest $request)
     {
         // validate the inputs provided by user/admin.
-        $data = $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:authors,email',
-        ]);
+        // $data = $request->validate([
+        //     'name'  => 'required|string|max:255',
+        //     'email' => 'required|email|unique:authors,email',
+        // ]);
 
-        Author::create($data);
+        Author::create($request->validated());
 
-        return redirect()->route('authors.index');
+        return redirect()
+            ->route('authors.index')
+            ->with("success", "Author Createed Successfully.");
     }
 
     /**

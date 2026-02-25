@@ -11,7 +11,10 @@ class StoreAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // Temporary: allow everyone
+        // Later you can add role check like:
+        // return auth()->user()->role === 'admin';
+        return true;
     }
 
     /**
@@ -23,6 +26,17 @@ class StoreAuthorRequest extends FormRequest
     {
         return [
             //
+            'name' => 'required|string|min:3|max:100|unique:authors,name',
+            'email' => 'required|email|max:150|unique:authors,email'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Author Name is Required.',
+            'name.unique' => 'This author name already exists',
+            'email.unique' => 'This email is already registered for another author'
         ];
     }
 }

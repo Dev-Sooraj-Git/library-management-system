@@ -28,4 +28,7 @@
     </tr>
     @endforeach
 </table>
+<div class="mt-3">
+    {{ $authors->links() }}
+</div>
 @endsection

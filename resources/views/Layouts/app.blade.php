@@ -15,6 +15,11 @@
     </nav>
 
     <hr>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
     <div style="max-width:800px; margin:auto;">
         @yield('content')
