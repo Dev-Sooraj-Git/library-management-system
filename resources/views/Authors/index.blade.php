@@ -4,7 +4,7 @@
 
 <a href="{{ route('authors.create') }}">Add New Author</a>
 
-<table border="1">
+<table class="table table-bordered table-striped">
     <tr>
         <th>ID</th>
         <th>Name</th>
