@@ -3,7 +3,7 @@
 ## Overview
 
 This project is a Laravel-based Library Management System developed as part of a technical assignment.  
-It demonstrates CRUD operations, relational database design, validation logic, and proper MVC architecture.
+It demonstrates CRUD operations, relational database design, validation logic, Service layer logic and proper MVC architecture.
 
 The application allows management of Authors and their Books with relational integrity and duplicate prevention.
 
