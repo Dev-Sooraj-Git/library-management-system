@@ -13,4 +13,15 @@ class Author extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+    public function borrowings(){
+        return $this->hasManyThrough(
+            Borrowing::class, // final table
+            Book::class, // intermediate table
+            'author_id', // author -> book
+            'book_id', // book -> borrowing
+            'id', // local id
+            'id' // local id
+        );
+    }
 }
