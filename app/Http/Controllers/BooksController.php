@@ -15,7 +15,7 @@ class BooksController extends Controller
     public function index()
     {
         // FETCH ALL DATA
-        $books = Book::with('author')->latest()->paginate(10);
+        $books = Book::with('author')->latest()->paginate(5);
         return view('Books.index', compact('books'));
         // return Book::all();
     }
@@ -47,10 +47,13 @@ class BooksController extends Controller
                 }),
             ],
             'author_id' => 'required|exists:authors,id',
+            'total_copies' => 'required|integer|min:1'
         ]);
+
+        $data['available_copies'] = $data['total_copies'];
         Book::create($data);
 
-        return redirect()->route('books.index');
+        return redirect()->route('books.index')->with('success', 'Book created!');
     }
 
     /**
@@ -86,11 +89,25 @@ class BooksController extends Controller
                     ->ignore($book->id),
             ],
             'author_id' => 'required|exists:authors,id',
+            'total_copies' => 'required|integer|min:1'
         ]);
+
+        $oldCopies = $book->total_copies;
+        $newCopies = $data['total_copies'];
+        $difference = $newCopies - $oldCopies;
+
+        $newAvailable = $book->available_copies + $difference;
+
+        // Prevent negative available copies
+        if ($newAvailable < 0) {
+            return back()->withErrors(['total_copies' => 'Cannot remove more copies than available']);
+        }
+
+        $data['available_copies'] = $newAvailable;
 
         $book->update($data);
 
-        return redirect()->route('books.index');
+        return redirect()->route('books.index')->with('success', 'Book Updated!');;
     }
 
     public function destroy(Book $book)

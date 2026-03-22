@@ -21,9 +21,9 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Borrow</th>
+                                <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Borrow</th> -->
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Available</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -32,24 +32,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $book->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $book->title }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $book->author->name ?? '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($book->available_copies > 0)
-                                    <form action="{{ route('books.borrow', $book) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit"
-                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm">
-                                            Borrow
-                                        </button>
-                                    </form>
-                                    @else
-                                    <span class="text-red-600 font-medium">Not Available</span>
-                                    @endif
-                                </td>
+
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $book->available_copies }} / {{ $book->total_copies }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-3 justify-evenly">
                                         <a href="{{ route('books.edit', $book->id) }}"
                                             class="text-indigo-600 hover:text-indigo-900">
                                             Edit
@@ -66,6 +54,19 @@
                                                 Delete
                                             </button>
                                         </form>
+                                        <!-- <td class="px-6 py-4 whitespace-nowrap"> -->
+                                        @if($book->available_copies > 0)
+                                        <form action="{{ route('books.borrow', $book) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm">
+                                                Borrow
+                                            </button>
+                                        </form>
+                                        @else
+                                        <span class="text-gray-400 font-medium">Unavailable</span>
+                                        @endif
+                                        <!-- </td> -->
                                     </div>
                                 </td>
                             </tr>

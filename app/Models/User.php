@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;  // ← Add this
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,13 +48,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function borrowings(){
+    public function borrowings()
+    {
         return $this->hasMany(Borrowing::class);
     }
 
-    public function books(){
-        return $this->belongsToMany(Book::class,'borrowings')
-                   // ->withPivot('borrowed_at','returned_at','due_date','status')
-                    ->withTimestamps();
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'borrowings')
+            // ->withPivot('borrowed_at','returned_at','due_date','status')
+            ->withTimestamps();
     }
 }
+
+
+// app/Models/User.php

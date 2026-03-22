@@ -1,74 +1,38 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Book;
 use App\Models\Borrowing;
-use Illuminate\Support\Facades\DB;
-
+use App\Models\User;
+use App\Services\BorrowingService;
 use Illuminate\Http\Request;
 
 class BorrowingController extends Controller
 {
-    //
-
-    // app/Http/Controllers/BorrowingController.php
-    public function borrow(Book $book)
+    public function borrow(Book $book, BorrowingService $service)
     {
-        // Check availability
-        if ($book->available_copies < 1) {
-            return back()->with('error', 'Book not available');
-        }
-
-        DB::beginTransaction();
+        /** @var User $user */
+        $user = auth()->user();
 
         try {
-            // Create borrowing record
-            Borrowing::create([
-                'user_id' => auth()->id(),
-                'book_id' => $book->id,
-                'borrowed_at' => now(),
-                'due_date' => now()->addDays(14),
-                'status' => 'borrowed'
-            ]);
-
-            // Decrease available copies
-            $book->decrement('available_copies');
-
-            DB::commit();
-
+            $service->borrow($book, $user);
             return back()->with('success', 'Book borrowed successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Something went wrong');
+            return back()->with('error', $e->getMessage());
         }
     }
 
-    public function return(Book $book)
+    public function return(Book $book, BorrowingService $service)
     {
-        DB::beginTransaction();
+        /** @var User $user */
+        $user = auth()->user();
 
         try {
-            $borrowing = Borrowing::where('book_id', $book->id)
-                ->where('user_id', auth()->id())
-                ->whereNull('returned_at')
-                ->first();
-
-            if (!$borrowing) {
-                return back()->with('error', 'You haven\'t borrowed this book');
-            }
-
-            $borrowing->update([
-                'returned_at' => now(),
-                'status' => 'returned'
-            ]);
-
-            $book->increment('available_copies');
-
-            DB::commit();
-
+            $service->return($book, $user);
             return back()->with('success', 'Book returned successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Something went wrong');
+            return back()->with('error', $e->getMessage());
         }
     }
 
