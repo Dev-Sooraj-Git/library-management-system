@@ -7,6 +7,8 @@ It demonstrates CRUD operations, relational database design, validation logic, S
 
 The application allows management of Authors and their Books with relational integrity and duplicate prevention.
 
+This application also has the breeze authentication, method.
+
 ---
 
 ## Features
