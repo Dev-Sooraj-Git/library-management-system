@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <!-- <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -13,7 +13,18 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+    @if(session('success'))
+    <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+        {{ session('success') }}
     </div>
+    <script>
+        setTimeout(() => {
+            document.getElementById('notification')?.remove();
+        }, 3000);
+    </script>
+    @endif
 
     <!-- Dashboard Navigation Cards - Tailwind Version (Works with Breeze) -->
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
